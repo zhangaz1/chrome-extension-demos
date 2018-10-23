@@ -1,0 +1,22 @@
+{
+    "name": "fontAwesome图标采集器",
+    "version": "1.0",
+    "manifest_version": 2,
+    "description": "采集fontAwesome官网图标的className",
+    "background": {
+        "scripts": ["jquery2.1.1.min.js", "background.js"]
+    },
+    "page_action": {
+        "default_icon": {
+            "19": "icon_19.png",
+            "38": "icon_38.png"
+        },
+        "default_title": "采集",
+        "default_popup": "popup.html"
+    },
+    "permissions": ["tabs", "http://接口URL/*"],
+    "content_scripts": [{
+        "matches": ["http://fontawesome.io/icons/"],
+        "js": ["jquery2.1.1.min.js", "content_script.js"]
+    }]
+}
