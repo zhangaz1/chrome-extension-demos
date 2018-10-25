@@ -5,7 +5,7 @@ var staticDomain = '';
 var staticUrl = '';
 
 
-location.href = "javascript:document.body.setAttribute('data-static', typeof(JS_IMG_URL)!=='undefined'?JS_IMG_URL:'');";
+// location.href = "javascript:document.body.setAttribute('data-static', typeof(JS_IMG_URL)!=='undefined'?JS_IMG_URL:'');";
 setTimeout(function() {
     var tempUrl = window.location.href;
     var tempDomain = '';
@@ -137,11 +137,6 @@ function init() {
     });
 
 }
-document.addEventListener('DOMContentLoaded', function() {
-    init();
-});
-
-$(init);
 
 // 写入cdn cookie
 function setCdnCookie(value, domain) {

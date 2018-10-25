@@ -5,7 +5,8 @@
     },
     "content_scripts": [{
         "js": ["scripts/lib/jquery-1.7.2.min.js", "scripts/main.js"],
-        "matches": ["http://*/*", "https://*/*"]
+        "matches": ["<all_urls>"],
+        "run_at": "document_end"
     }],
     "description": "Company test environment cookie settings(公司预发布环境cookie设置)",
     "icons": {
