@@ -13,15 +13,20 @@ function sendMessage() {
         active: true,
         currentWindow: true
     }, function(tabs) {
-        lastTabId = tabs[0].id;
-        chrome.tabs.sendMessage(lastTabId, "Background page started.");
+        if (tabs.length > 0) {
+            lastTabId = tabs[0].id;
+            chrome.tabs.sendMessage(lastTabId, "Background page started.");
+        }
     });
 }
 
 sendMessage();
+
+
 chrome.browserAction.setBadgeText({
     text: "ON"
 });
+
 console.log("Loaded.");
 
 chrome.runtime.onInstalled.addListener(function() {
@@ -33,7 +38,7 @@ chrome.runtime.onInstalled.addListener(function() {
 
     // Register a webRequest rule to redirect bing to google.
     var wr = chrome.declarativeWebRequest;
-    chrome.declarativeWebRequest.onRequest.addRules([{
+    wr.onRequest.addRules([{
         id: "0",
         conditions: [new wr.RequestMatcher({
             url: {
