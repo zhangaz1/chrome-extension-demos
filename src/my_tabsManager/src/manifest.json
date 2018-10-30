@@ -1,0 +1,27 @@
+{
+    "manifest_version": 2,
+
+    "name": "tabs manager",
+    "version": "0.1",
+    "description": "support tabs manager: getTabId/closeTab/activeTab ...",
+
+    "permissions": [
+        "tabs"
+    ],
+
+    "background": {
+        "scripts": ["background/background.js"]
+    },
+
+    "content_scripts": [{
+        "matches": ["*://*/*"],
+        "js": ["content_scripts/page.js"]
+    }],
+
+    "browser_action": {
+        "default_title": "tabs managed",
+        "default_icon": "icons/icon.png",
+        "default_popup": "popup/popup.html"
+    }
+
+}

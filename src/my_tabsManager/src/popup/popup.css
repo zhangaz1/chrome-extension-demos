@@ -1,0 +1,9 @@
+.tabs-table {
+    border: solid 1px black;
+    border-collapse: collapse;
+}
+
+.tabs-table th,
+.tabs-table td {
+    border: dotted 1px black;
+}
