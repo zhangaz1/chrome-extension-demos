@@ -2,16 +2,17 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-chrome.runtime.onConnect.addListener(function(port) {
-    port.onMessage.addListener(function(msg) {
-        port.postMessage({
-            counter: msg.counter + 1
+chrome.runtime.onConnect
+    .addListener(function(port) {
+        port.onMessage.addListener(function(msg) {
+            port.postMessage({
+                counter: msg.counter + 1
+            });
         });
     });
-});
 
-chrome.runtime.onMessage.addListener(
-    function(request, sender, sendResponse) {
+chrome.runtime.onMessage
+    .addListener(function(request, sender, sendResponse) {
         sendResponse({
             counter: request.counter + 1
         });
