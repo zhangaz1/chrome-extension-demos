@@ -3,12 +3,16 @@
 // found in the LICENSE file.
 
 chrome.runtime.onConnect.addListener(function(port) {
-  port.onMessage.addListener(function(msg) {
-    port.postMessage({counter: msg.counter+1});
-  });
+    port.onMessage.addListener(function(msg) {
+        port.postMessage({
+            counter: msg.counter + 1
+        });
+    });
 });
 
 chrome.runtime.onMessage.addListener(
-  function(request, sender, sendResponse) {
-    sendResponse({counter: request.counter+1});
-  });
+    function(request, sender, sendResponse) {
+        sendResponse({
+            counter: request.counter + 1
+        });
+    });
