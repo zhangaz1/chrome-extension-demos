@@ -1,6 +1,6 @@
   ;
   (function() {
-      let tabs = [];
+      let tabIds = [];
 
       const actionHandlers = {
           getTabId,
@@ -26,13 +26,25 @@
       }
 
       function getTabs() {
-          return _.map(tabs, tab => {
-              return {
-                  id: tab.id,
-                  title: tab.title,
-                  url: tab.url
-              };
+          return new Promise(function(resolve, reject) {
+              chrome.tabs.query({}, tabs => {
+                  const result = _.chain(tabs)
+                      .filter(tab => _.includes(tabIds, tab.id))
+                      .map(getTabSummary)
+                      .value();
+
+                  resolve(result);
+              });
           });
+      }
+
+      function getTabSummary(tab) {
+          return {
+              id: tab.id,
+              title: tab.title,
+              url: tab.url,
+              active: tab.active
+          };
       }
 
       function activeTab(tabId) {
@@ -75,8 +87,9 @@
       }
 
       function manageTab(request, sender, response) {
-          var tab = sender.tab;
-          tabs.push(tab);
+          var tabId = sender.tab.id;
+          tabIds.push(tabId);
+          tabIds = _.uniq(tabIds)
       }
 
       function addTabRemoveHandler() {
@@ -85,7 +98,7 @@
       }
 
       function tabRemoveHandler(tabId, removeInfo) {
-          tabs = _.filter(tabs, tab => tab.id !== tabId);
+          tabIds = _.filter(tabIds, tab => tab !== tabId);
       }
 
   })();

@@ -9,8 +9,8 @@
     return void(0);
 
     function init() {
-        const tabs = api.getTabs();
-        bindTabs(tabs);
+        api.getTabs()
+            .then(bindTabs);
     }
 
     function bindTabs(tabs) {
@@ -51,6 +51,7 @@
 					<td>{{id}}</td>
 					<td>{{title}}</td>
 					<td>{{url}}</td>
+					<td>{{active}}</td>
 					<td>
 						<button tabId="{{id}}" action="activeTab">Active</button>
 						<button tabId="{{id}}" action="closeTab">Close</button>
