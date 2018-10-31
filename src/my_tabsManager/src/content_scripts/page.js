@@ -40,7 +40,7 @@
                 return;
             }
 
-            if (typeof callback === 'function') {
+            if (_.isFunction(callback)) {
                 callback(response);
             }
         };

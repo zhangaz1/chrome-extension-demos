@@ -1,6 +1,6 @@
 ;
 (function() {
-    let api = chrome.extension
+    const api = chrome.extension
         .getBackgroundPage()
         .tabsManagerApi;
 
@@ -9,20 +9,39 @@
     return void(0);
 
     function init() {
-        let tabs = api.getTabs();
+        const tabs = api.getTabs();
         bindTabs(tabs);
     }
 
     function bindTabs(tabs) {
-        let tabRowTemplate = getTabRowTemplate();
-        let template = Handlebars.compile(tabRowTemplate);
-        let html = template({
+        const tabRowTemplate = getTabRowTemplate();
+        const template = Handlebars.compile(tabRowTemplate);
+        const html = template({
             tabs
         });
 
+        const rows = $(html);
+        bindActionHandlers(rows);
+
         $('#tabs')
             .empty()
-            .append(html);
+            .append(rows);
+    }
+
+    function bindActionHandlers(rows) {
+        rows.find('button')
+            .click(actionHandler);
+    }
+
+    function actionHandler() {
+        const btn = $(this);
+        const action = btn.attr('action');
+        const tabId = btn.attr('tabId');
+
+        const handler = api[action];
+        if (_.isFunction(handler)) {
+            handler(tabId);
+        }
     }
 
     function getTabRowTemplate() {
@@ -32,7 +51,10 @@
 					<td>{{id}}</td>
 					<td>{{title}}</td>
 					<td>{{url}}</td>
-					<td><button tabId="{{id}}">Close</button></td>
+					<td>
+						<button tabId="{{id}}" action="activeTab">Active</button>
+						<button tabId="{{id}}" action="closeTab">Close</button>
+					</td>
 				</tr>
 			{{/each}}
 		`;

@@ -20,6 +20,8 @@
       function publishApi() {
           window.tabsManagerApi = {
               getTabs,
+              activeTab,
+              closeTab,
           };
       }
 
@@ -31,6 +33,22 @@
                   url: tab.url
               };
           });
+      }
+
+      function activeTab(tabId) {
+          chrome.tabs.update(
+              Number(tabId), {
+                  active: true,
+              },
+              () => console.log('active tab:', tabId)
+          );
+      }
+
+      function closeTab(tabId) {
+          chrome.tabs.remove(
+              Number(tabId),
+              () => console.log('close tab:', tabId)
+          );
       }
 
       function addMessageHandler() {
