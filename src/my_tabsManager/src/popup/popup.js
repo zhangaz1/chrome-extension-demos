@@ -1,13 +1,16 @@
 ;
 (function() {
-    let bg = chrome.extension.getBackgroundPage();
+    let api = chrome.extension
+        .getBackgroundPage()
+        .tabsManagerApi;
 
     $(init);
 
     return void(0);
 
     function init() {
-        bindTabs(bg.tabs);
+        let tabs = api.getTabs();
+        bindTabs(tabs);
     }
 
     function bindTabs(tabs) {
