@@ -12,8 +12,10 @@
 
     function bindTabs(tabs) {
         let tabRowTemplate = getTabRowTemplate();
-        let template = _.template(tabRowTemplate);
-        let html = template(tabs);
+        let template = Handlebars.compile(tabRowTemplate);
+        let html = template({
+            tabs
+        });
 
         $('#tabs')
             .empty()
@@ -21,12 +23,16 @@
     }
 
     function getTabRowTemplate() {
-        return `<tr>
-			<td>{{id}}</td>
-			<td>{{title}}</td>
-			<td>{{url}}</td>
-			<td><button tabId="{{id}}">Close</button></td>
-		</tr>`;
+        return `
+			{{#each tabs}}
+				<tr>
+					<td>{{id}}</td>
+					<td>{{title}}</td>
+					<td>{{url}}</td>
+					<td><button tabId="{{id}}">Close</button></td>
+				</tr>
+			{{/each}}
+		`;
     }
 
 })();
