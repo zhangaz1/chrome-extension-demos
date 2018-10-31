@@ -5,6 +5,8 @@
     "version": "0.1",
     "description": "support tabs manager: getTabId/closeTab/activeTab ...",
 
+    "content_security_policy": "default-src 'self'; script-src 'self' 'unsafe-eval';",
+
     "permissions": [
         "tabs"
     ],
