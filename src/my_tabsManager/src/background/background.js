@@ -27,14 +27,18 @@
 
       function getTabs() {
           return new Promise(function(resolve, reject) {
-              chrome.tabs.query({}, tabs => {
-                  const result = _.chain(tabs)
-                      .filter(tab => _.includes(tabIds, tab.id))
-                      .map(getTabSummary)
-                      .value();
+              getTabsByCb(resolve);
+          });
+      }
 
-                  resolve(result);
-              });
+      function getTabsByCb(callback) {
+          chrome.tabs.query({}, tabs => {
+              const result = _.chain(tabs)
+                  .filter(tab => _.includes(tabIds, tab.id))
+                  .map(getTabSummary)
+                  .value();
+
+              callback(result);
           });
       }
 
@@ -89,7 +93,9 @@
       function manageTab(request, sender, response) {
           var tabId = sender.tab.id;
           tabIds.push(tabId);
-          tabIds = _.uniq(tabIds)
+          tabIds = _.uniq(tabIds);
+
+          getTabsByCb(response);
       }
 
       function addTabRemoveHandler() {

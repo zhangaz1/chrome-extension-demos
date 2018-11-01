@@ -2,22 +2,30 @@
 (function() {
     let tabId = -1;
 
-    getTabId();
-    manageTab();
+    init();
 
     return void(0);
 
-    function manageTab() {
-        simpleMessage('manageTab');
+    function init() {
+        getTabId(gotTabId);
+        manageTab(gotTabs);
     }
 
-    function getTabId() {
-        simpleMessage('getTabId', gotTabId);
+    function manageTab(callback) {
+        simpleMessage('manageTab', callback);
+    }
+
+    function getTabId(callback) {
+        simpleMessage('getTabId', callback);
     }
 
     function gotTabId(response) {
         tabId = response.tabId;
         log('got tabId:', tabId);
+    }
+
+    function gotTabs(tabs) {
+        console.log('got tabs:', tabs);
     }
 
     function simpleMessage(action, callback) {
