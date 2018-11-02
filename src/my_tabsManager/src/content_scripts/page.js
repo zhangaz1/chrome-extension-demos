@@ -2,13 +2,46 @@
 (function() {
     let tabId = -1;
 
+    const actionHandlers = {
+        gotTabs: gotTabsHandler,
+    };
+
     init();
 
     return void(0);
 
     function init() {
+        addMessageHandler();
         getTabId(gotTabId);
-        manageTab(gotTabs);
+        manageTab();
+        getTabs();
+    }
+
+    function addMessageHandler() {
+        chrome.runtime.onMessage
+            .addListener(messageHandler);
+    }
+
+    function messageHandler(request, sender, response) {
+        const actionHandler = actionHandlers[request.action];
+
+        if (actionHandler) {
+            actionHandler(request, sender, response || _.noop);
+        } else {
+            const errorMessage = `has no action handler of: ${request.action}`;
+            if (_.isFunction(response)) {
+                response({
+                    error: errorMessage
+                });
+            } else {
+                console.log(errorMessage);
+            }
+        }
+    }
+
+    function gotTabsHandler(response, extension, callback) {
+        gotTabs(response.tabs);
+        callback();
     }
 
     function manageTab(callback) {
@@ -22,6 +55,13 @@
     function gotTabId(response) {
         tabId = response.tabId;
         log('got tabId:', tabId);
+    }
+
+    function getTabs(callback) {
+        sendMessage({
+            action: 'getTabs',
+            handler: 'gotTabs',
+        }, callback);
     }
 
     function gotTabs(tabs) {

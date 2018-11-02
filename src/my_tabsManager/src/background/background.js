@@ -5,6 +5,7 @@
       const actionHandlers = {
           getTabId,
           manageTab,
+          getTabs: getTabByMessage,
       };
 
       init();
@@ -73,14 +74,19 @@
       }
 
       function messageHandler(request, sender, response) {
-          let actionHandler = actionHandlers[request.action];
+          const actionHandler = actionHandlers[request.action];
 
           if (actionHandler) {
-              actionHandler(request, sender, response);
+              actionHandler(request, sender, response || _.noop);
           } else {
-              response({
-                  error: `has no action handler of: ${request.action}`
-              });
+              const errorMessage = `has no action handler of: ${request.action}`;
+              if (_.isFunction(response)) {
+                  response({
+                      error: errorMessage
+                  });
+              } else {
+                  console.log(errorMessage);
+              }
           }
       }
 
@@ -94,8 +100,17 @@
           var tabId = sender.tab.id;
           tabIds.push(tabId);
           tabIds = _.uniq(tabIds);
+          response();
+      }
 
-          getTabsByCb(response);
+      function getTabByMessage(request, sender, response) {
+          //   getTabsByCb(response);
+          getTabs().then(tabs => {
+              chrome.tabs.sendMessage(sender.tab.id, {
+                  tabs,
+                  action: request.handler
+              });
+          });
       }
 
       function addTabRemoveHandler() {
